@@ -12,7 +12,7 @@ def check_token():
 
             try:
                 user_auth_tuple = TokenAuthentication().authenticate(request=args[1])
-                args[1].user = user_auth_tuple[0]
+                args[1].user = user_auth_tuple[0] # if not implemented return anonymous user
             except AuthenticationFailed:
                 return JsonResponse({"result": "Error Authentification Failed", "status":"error", "code": 3})
 
