@@ -79,7 +79,7 @@ class Pokemon(APIView):
             check_pokemon = PokemonUser.objects.filter(pokemon_id=type)
 
             if check_pokemon:
-                print(dir(userBase.objects.get(pokemon_id=type).pokemon.delete()))
+                print(dir(userBase.objects.get(user=user_auth_tuple[0], pokemon_id=type).pokemon.delete()))
             else:
                 return JsonResponse({"result": "No Pokemon found", "status":"error", "code": 1})
 
@@ -90,7 +90,7 @@ class Pokemon(APIView):
 
     @classmethod
     @check_token()
-    ### API user 
+    ### API user
     def me(self, request):
         # TO DO...
         pass
