@@ -37,10 +37,10 @@ class Pokemon(APIView):
         if request.method == "GET":
             client = PokeAPI()
 
-            all_pokemon = client.getPokemon(id)
+            thepokemon = client.getPokemon(id)
 
-            if isinstance(all_pokemon, list) and len(all_pokemon) >= 1:
-                return JsonResponse({"result": all_pokemon, "status": "success"})
+            if isinstance(thepokemon, list) and len(thepokemon) >= 1:
+                return JsonResponse({"result": thepokemon, "status": "success"})
             else:
                 return JsonResponse({"result": "Error Pokemon not found", "status":"error", "code": 1})
         else:
