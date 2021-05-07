@@ -11,16 +11,16 @@ class PokeAPI():
         MAX_POKEMON = 1000
 
         for i in range(1, MAX_POKEMON):
+            if pokemon == "Not Found":
+                break
+                
             pokemon = self.requests.get("https://pokeapi.co/api/v2/pokemon/{}".format(i)).text
             list_pokemon.append(pokemon)
 
-            if pokemon == "Not Found":
-                break
-
-        if len(list_pokemon) >= 1:
-            return list_pokemon
-        else:
+        if len(list_pokemon) == 0:
             return []
+        
+        return list_pokemon
 
     def getPokemon(self, id):
         list_pokemon = []
@@ -31,8 +31,7 @@ class PokeAPI():
         if pokemon != "Not Found":
             list_pokemon.append(pokemon)
 
-
-        if len(list_pokemon) >= 1:
-            return list_pokemon
-        else:
+        if len(list_pokemon) == 0:
             return []
+
+        return list_pokemon
