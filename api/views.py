@@ -87,3 +87,10 @@ class Pokemon(APIView):
 
         else:
             return JsonResponse({"result": "Error input value", "status":"error", "code": 2})
+
+    @classmethod
+    @check_token()
+    ### API user 
+    def me(self, request):
+        # TO DO...
+        pass
