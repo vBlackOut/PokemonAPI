@@ -49,8 +49,6 @@ class Pokemon(APIView):
     @classmethod
     @check_token()
     def addPokemon(self, request, type):
-
-        token_request = request.headers['Authorization'].split('Token ')[1].strip()
         user_auth_tuple = TokenAuthentication().authenticate(request=request)
 
         if type.isdigit():
@@ -70,8 +68,6 @@ class Pokemon(APIView):
     @classmethod
     @check_token()
     def removePokemon(self, request, type):
-
-        token_request = request.headers['Authorization'].split('Token ')[1].strip()
         user_auth_tuple = TokenAuthentication().authenticate(request=request)
 
         if type.isdigit():
