@@ -16,11 +16,11 @@ def check_token():
             except AuthenticationFailed:
                 return JsonResponse({"result": "Error Authentification Failed", "status":"error", "code": 3})
 
-            if len(user_auth_tuple) >= 1 and str(user_auth_tuple[1]) == token_request:
-                oldfunction = func(*args, **kwargs)
-                return oldfunction
-            else:
-                return JsonResponse({"result": "Error Authentification Failed", "status":"error", "code": 3})
+            if len(user_auth_tuple) == 0 and str(user_auth_tuple[1]) != token_request:
+               return JsonResponse({"result": "Error Authentification Failed", "status":"error", "code": 3})
+
+            oldfunction = func(*args, **kwargs)
+            return oldfunction
 
         return wrapper
     return real_decorator
