@@ -22,7 +22,7 @@ class Pokemon(APIView):
         if request.method != "GET":
             return JsonResponse({"result": "Error method api", "status":"error", "code": 2})
 
-        if not isinstance(all_pokemon, list) and len(all_pokemon) == 0:
+        if not isinstance(all_pokemon, list) or len(all_pokemon) == 0:
             return JsonResponse({"result": "Error empty list", "status":"error", "code": 1})
 
         all_pokemon = PokeAPI.allPokemon()
@@ -39,7 +39,7 @@ class Pokemon(APIView):
             return JsonResponse({"result": "Error method api", "status":"error", "code": 2})
 
 
-        if not isinstance(all_pokemon, list) and len(all_pokemon) == 0:
+        if not isinstance(all_pokemon, list) or len(all_pokemon) == 0:
             return JsonResponse({"result": "Error Pokemon not found", "status":"error", "code": 1})
 
         pokemon = PokeAPI.getPokemon(id)
