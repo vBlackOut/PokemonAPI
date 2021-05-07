@@ -37,10 +37,10 @@ class Pokemon(APIView):
         if request.method == "GET":
             client = PokeAPI()
 
-            thepokemon = client.getPokemon(id)
+            all_pokemon = client.getPokemon(id)
 
-            if isinstance(thepokemon, list) and len(thepokemon) >= 1:
-                return JsonResponse({"result": thepokemon, "status": "success"})
+            if isinstance(all_pokemon, list) and len(all_pokemon) >= 1:
+                return JsonResponse({"result": all_pokemon, "status": "success"})
             else:
                 return JsonResponse({"result": "Error Pokemon not found", "status":"error", "code": 1})
         else:
@@ -49,14 +49,13 @@ class Pokemon(APIView):
     @classmethod
     @check_token()
     def addPokemon(self, request, type):
-        user_auth_tuple = TokenAuthentication().authenticate(request=request)
 
         if type.isdigit():
 
             check_pokemon = PokemonUser.objects.filter(pokemon_id=type)
             if check_pokemon:
                 id_pokemon = PokemonUser.objects.get(pokemon_id=type)
-                userBase.objects.create(user=user_auth_tuple[0], pokemon=id_pokemon)
+                userBase.objects.create(user=request.user, pokemon=id_pokemon)
             else:
                 id_pokemon = PokemonUser.objects.create(pokemon_id=type)
 
@@ -68,14 +67,13 @@ class Pokemon(APIView):
     @classmethod
     @check_token()
     def removePokemon(self, request, type):
-        user_auth_tuple = TokenAuthentication().authenticate(request=request)
 
         if type.isdigit():
 
             check_pokemon = PokemonUser.objects.filter(pokemon_id=type)
 
             if check_pokemon:
-                print(dir(userBase.objects.get(user=user_auth_tuple[0], pokemon_id=type).pokemon.delete()))
+                print(dir(userBase.objects.get(user=request.user, pokemon_id=type).pokemon.delete()))
             else:
                 return JsonResponse({"result": "No Pokemon found", "status":"error", "code": 1})
 
