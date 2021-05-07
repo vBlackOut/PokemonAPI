@@ -19,68 +19,69 @@ class Pokemon(APIView):
     @classmethod
     @check_token()
     def getAll(self, request):
-        if request.method == "GET":
-            client = PokeAPI()
-
-            all_pokemon = client.allPokemon()
-
-            if isinstance(all_pokemon, list) and len(all_pokemon) >= 1:
-                return JsonResponse({"result": all_pokemon, "status": "success"})
-            else:
-                return JsonResponse({"result": "Error empty list", "status":"error", "code": 1})
-        else:
+        if request.method != "GET":
             return JsonResponse({"result": "Error method api", "status":"error", "code": 2})
+
+        all_pokemon = PokeAPI.allPokemon()
+
+        if isinstance(all_pokemon, list) and len(all_pokemon) >= 1:
+            return JsonResponse({"result": all_pokemon, "status": "success"})
+        else:
+            return JsonResponse({"result": "Error empty list", "status":"error", "code": 1})
+
 
     @classmethod
     @check_token()
     def getPokemon(self, request, id):
-        if request.method == "GET":
-            client = PokeAPI()
 
-            all_pokemon = client.getPokemon(id)
-
-            if isinstance(all_pokemon, list) and len(all_pokemon) >= 1:
-                return JsonResponse({"result": all_pokemon, "status": "success"})
-            else:
-                return JsonResponse({"result": "Error Pokemon not found", "status":"error", "code": 1})
-        else:
+        if request.method != "GET":
             return JsonResponse({"result": "Error method api", "status":"error", "code": 2})
+
+        pokemon = PokeAPI.getPokemon(id)
+
+        if isinstance(all_pokemon, list) and len(all_pokemon) >= 1:
+            return JsonResponse({"result": pokemon, "status": "success"})
+        else:
+            return JsonResponse({"result": "Error Pokemon not found", "status":"error", "code": 1})
+
 
     @classmethod
     @check_token()
     def addPokemon(self, request, type):
 
-        if type.isdigit():
+        if request.method != "POST":
+            return JsonResponse({"result": "Error method api", "status":"error", "code": 2})
 
-            check_pokemon = PokemonUser.objects.filter(pokemon_id=type)
-            if check_pokemon:
-                id_pokemon = PokemonUser.objects.get(pokemon_id=type)
-                userBase.objects.create(user=request.user, pokemon=id_pokemon)
-            else:
-                id_pokemon = PokemonUser.objects.create(pokemon_id=type)
+        if not type.isdigit():
+            return JsonResponse({"result": "Error input value", "status":"error", "code": 2})
 
-            return JsonResponse({"result": "ok", "status": "success"})
-
+        check_pokemon = PokemonUser.objects.filter(pokemon_id=type)
+        
+        if check_pokemon:
+            id_pokemon = PokemonUser.objects.get(pokemon_id=type)
+            userBase.objects.create(user=request.user, pokemon=id_pokemon)
         else:
-            return JsonResponse({"result": "Error input value", "status": "error", "code": 2})
+            id_pokemon = PokemonUser.objects.create(pokemon_id=type)
+
+        return JsonResponse({"result": "ok", "status": "success"})
+
 
     @classmethod
     @check_token()
     def removePokemon(self, request, type):
 
-        if type.isdigit():
-
-            check_pokemon = PokemonUser.objects.filter(pokemon_id=type)
-
-            if check_pokemon:
-                print(dir(userBase.objects.get(user=request.user, pokemon_id=type).pokemon.delete()))
-            else:
-                return JsonResponse({"result": "No Pokemon found", "status":"error", "code": 1})
-
-            return JsonResponse({"result": "ok", "status": "success"})
-
-        else:
+        if not type.isdigit():
             return JsonResponse({"result": "Error input value", "status":"error", "code": 2})
+
+        check_pokemon = PokemonUser.objects.filter(pokemon_id=type)
+
+        if check_pokemon:
+            userBase.objects.get(user=request.user, pokemon_id=type).pokemon.delete()
+        else:
+            return JsonResponse({"result": "No Pokemon found", "status":"error", "code": 1})
+
+        return JsonResponse({"result": "ok", "status": "success"})
+
 
     @classmethod
     @check_token()
