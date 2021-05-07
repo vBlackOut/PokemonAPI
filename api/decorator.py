@@ -9,8 +9,10 @@ def check_token():
         def wrapper(*args, **kwargs):
 
             token_request = args[1].headers['Authorization'].split('Token ')[1].strip()
+
             try:
                 user_auth_tuple = TokenAuthentication().authenticate(request=args[1])
+                args[1].user = user_auth_tuple[0]
             except AuthenticationFailed:
                 return JsonResponse({"result": "Error Authentification Failed", "status":"error", "code": 3})
 
