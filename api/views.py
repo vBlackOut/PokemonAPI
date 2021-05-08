@@ -1,13 +1,9 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from django.http import JsonResponse
-from rest_framework.authentication import TokenAuthentication
 from api.pokemon import PokeAPI
 from api.decorator import check_token
-from django.http import JsonResponse
 from api.models import userBase, PokemonUser
-import requests
 
 # Error Code API
 # 1 - No found
