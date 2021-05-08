@@ -23,8 +23,6 @@ class PokeAPI():
         return list_pokemon
 
     def getPokemon(self, id):
-        list_pokemon = []
-        MAX_POKEMON = 1000
 
         pokemon = self.requests.get("https://pokeapi.co/api/v2/pokemon/{}".format(id)).json()
 
